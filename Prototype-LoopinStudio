@@ -1,0 +1,45 @@
+<html>
+  <h1 id = "Koin">Koin: 100</h1>
+  <h1 id = "Darah">Darah: 480</h1>
+  <h1 id = "Potion">Potion: 0</h1>
+  <h1 id = "Exp">Exp: 0</h1>
+  <button onclick = "Buy()">Buy Potion 20 koin</button>
+  <button onclick = "Attack()">Attack</button>
+    <button onclick = "Use()">Use Potion</button>
+    <button onclick = "Kurangi()">Kurangi Darah 50</button>
+  <script>
+    let Darah = 480;
+    let Koin = 100;
+    let Potion = 0;
+    let Exp = 0;
+    
+    function Buy(){
+      if (Koin < 20){return;}
+      if (Potion >= 3){return;}
+      Potion = Potion + 1;
+      Koin = Koin - 20;
+      document.getElementById("Potion").innerText="Potion: "+Potion
+      document.getElementById("Koin").innerText="Koin: "+Koin
+      }
+    
+    function Use(){
+      if (Darah <= 0){return;}
+      
+      if (Potion <= 0){return;}
+      if (Darah >= 500){return;}
+      Darah = Darah + 50;
+      if (Darah >= 500){Darah = 500;}
+      Potion = Potion - 1;
+      document.getElementById("Darah").innerText="Darah: "+Darah;
+      document.getElementById("Potion").innerText="Potion: "+Potion
+      }
+      
+    function Kurangi(){
+      if (Darah <= 0){
+        return;}
+      Darah = Darah - 50;
+      document.getElementById("Darah").innerText="Darah: "+Darah
+      }
+  
+  </script>
+</html>
