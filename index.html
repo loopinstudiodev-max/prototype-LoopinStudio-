@@ -1,40 +1,200 @@
+<!DOCTYPE html>
+<title>prototype 2 (not complete)</title>
 <html>
-  <h1 id = "Koin">Koin: 100</h1>
-  <h1 id = "Darah">Darah: 480</h1>
-  <h1 id = "Potion">Potion: 0</h1>
-  <h1 id = "Exp">Exp: 0</h1>
-  <button onclick = "Buy()">Buy Potion 20 koin</button>
-  <button onclick = "Attack()">Attack</button>
-    <button onclick = "Use()">Use Potion</button>
-    <button onclick = "Kurangi()">Kurangi Darah 50</button>
+  <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
+  <title>Game Prototype</title>
+
+    <style>
+    body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: fixed;
+  touch-action: none
+  
+
+}
+  #bg-layar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;  
+  height: 100vh; 
+  background-color: cyan; 
+  z-index: -1;
+}
+  .world {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;}
+  
+  .back{
+    
+    width: 100vh;
+      height: 100vh;
+      left: -0px;
+      top: 50px;
+      position: absolute;
+      background-image: url('background.jpg');
+      background-repeat: repeat-x;
+      background-size: contain;
+  }
+
+  .tanah{
+    background-color: brown;
+    height: 50vh;
+    width: 100vw;
+    left: 0px;
+    top: 1090px;
+    position: absolute;
+    background-repeat: repeat-x;
+    background-size: contain;
+    
+  }
+    .char {
+  width: 350px;
+  height: 350px;
+  position: absolute;
+  left: -50px;
+  top: 450px;
+  background-image: url('karakter3.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  
+  z-index: 99;
+}
+
+      .button{
+        width: 200px;
+        height: 200px;
+        position: relative;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+      .btn-kanan{
+        left: 70%;
+        top: 80%;
+        font-size: 200%;
+      }
+      .btn-kiri{
+        left: -10%;
+        top: 80%;
+        font-size: 200%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-layar"></div>
+    
+    <div id = "world">
+     
+      <div class="back" id="back"></div>
+      <div class="tanah" id="tanah"></div>
+      <div class="char" id="kar"></div>
+                    </div>
+      <button class="button btn-kanan"
+              ontouchstart="mulai()"
+              ontouchend="stop()"
+              oncontextmenu="return false;">></button>
+      <button class="button btn-kiri"
+              ontouchstart="mulai1()"
+              ontouchend="stop1()"
+              oncontextmenu="return false;"><</button>
+
+  </body>
   <script>
-    let Darah = 480;
-    let Koin = 100;
-    let Potion = 0;
-    let Exp = 0;
+    let lari = 0;
+    let timer = null;
+    let bgpos = 0;
+    let lebarfoto = 1900;
+    let charelem = document.querySelector('.char');
+    let direction = 1;
+    let sfx = new Audio('langkah.mp3');
+    sfx.loop = true;
+    sfx.preload = 'auto';
     
-    function Buy(){
-      if (Koin < 20){return;}
-      if (Potion >= 3){return;}
-      Potion = Potion + 1;
-      Koin = Koin - 20;
-      document.getElementById("Potion").innerText="Potion: "+Potion
-      document.getElementById("Koin").innerText="Koin: "+Koin
+    function walk(){
+      lari = lari + 30;
+      direction = 1;
+      bgpos = -((lari % lebarfoto + lebarfoto) % lebarfoto);
+      update();
+    }
+    function backed(){
+     lari = lari - 30;
+     direction = -1;
+     bgpos = -((lari % lebarfoto + lebarfoto) % lebarfoto);
+     update();
+    }
+    function resetChar(){
+      document.querySelector('.char').style.backgroundImage= "url('karakter3.png')";
+    }
+    function mulai(){
+      if (timer !== null)return;
+      timer=setInterval(walk, 150);
+      sfx.currentTime=0;
+      sfx.play();
+    }
+    function mulai1(){
+      if (timer !== null)return;
+      timer=setInterval(backed, 150);
+      sfx.currentTime=0;
+      sfx.play()
+    }
+    function stop(){
+      clearInterval(timer);
+      timer=null;
+      resetChar()
+      sfx.pause();
+    }
+    function stop1(){
+      clearInterval(timer);
+      timer=null;
+      resetChar()
+      sfx.pause();
+    }
+    function prepare(){
+      sfx.play().then(() => {
+        sfx.pause();
+        sfx.currentTime=0;}).catch(() => {});
       }
+    function update(){
+      document.getElementById("back").style.backgroundPositionX= bgpos + "px";
+      document.getElementById("tanah").style.backgroundPositionX= bgpos + "px";
+      
+      let charStyle = document.querySelector('.char').style;
+      if (direction === -1){
+        charStyle.transform= "scaleX(-1)";
+      } else {
+        charStyle.transform= "scaleX(1)";
+      }
+      if (timer === null){
+        resetChar();
+        return;
+      }
+      let frame = Math.floor(Math.abs(lari) / 15) % 3;
+      if (frame === 0){
+        charStyle.backgroundImage= "url('karakter.png')";
+      } else if (frame === 1) {
+        charStyle.backgroundImage= "url('karakter2.png')";
+      } else if (frame === 2){
+        charStyle.backgroundImage= "url('karakter3.png')";
+      }
+      }
+      window.addEventListener('touchstart',
+        function(){
+          prepare();
+        }, { once : true });
+        
     
-    function Use(){
-      if (Darah <= 0){return;}
-      
-      if (Potion <= 0){return;}
-      if (Darah >= 500){return;}
-      Darah = Darah + 50;
-      if (Darah >= 500){Darah = 500;}
-      Potion = Potion - 1;
-      document.getElementById("Darah").innerText="Darah: "+Darah;
-      document.getElementById("Potion").innerText="Potion: "+Potion
-      }
-      
-    function Kurangi(){
+  </script>
+</html>    function Kurangi(){
       if (Darah <= 0){
         return;}
       Darah = Darah - 50;
