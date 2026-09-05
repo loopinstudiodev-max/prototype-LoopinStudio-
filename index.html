@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
-  <title>game prototype2</title>
+    <title> Game Prototype
+    By: Yohanes</title>
   <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <style>
-    body {
+  <style>
+body {
   margin: 0;
   padding: 0;
   width: 100vw;
@@ -14,8 +15,6 @@
   position: fixed;
   touch-action: none
   
-
-}
   #bg-layar {
   position: fixed;
   top: 0;
@@ -25,17 +24,17 @@
   background-color: cyan; 
   z-index: -1;
 }
-  .world {
-  width: 100vw;
-  height: 100vh;
+  .dunia {
+  width: 100%;
+  height: 300px;
   position: relative;
   overflow: hidden;}
   
   .back{
-    
-    width: 100vh;
-      height: 100vh;
-      left: -0px;
+    background-color: cyan;
+    width: 700px;
+      height: 550px;
+      left: -10px;
       top: 50px;
       position: absolute;
       background-image: url('background.jpg');
@@ -45,21 +44,21 @@
 
   .tanah{
     background-color: brown;
-    height: 50vh;
-    width: 100vw;
+    height: 700px;
+    width: 452px;
     left: 0px;
-    top: 1090px;
+    top: 500px;
     position: absolute;
     background-repeat: repeat-x;
     background-size: contain;
     
   }
     .char {
-  width: 350px;
-  height: 350px;
+  width: 120px;
+  height: 120px;
   position: absolute;
-  left: -50px;
-  top: 450px;
+  left: 50px;
+  top: 210px;
   background-image: url('karakter3.png');
   background-repeat: no-repeat;
   background-size: contain;
@@ -68,129 +67,184 @@
   z-index: 99;
 }
 
-      .button{
-        width: 200px;
-        height: 200px;
-        position: relative;
-        user-select: none;
-        -webkit-user-select: none;
-      }
-      .btn-kanan{
-        left: 70%;
-        top: 80%;
-        font-size: 200%;
-      }
-      .btn-kiri{
-        left: -10%;
-        top: 80%;
-        font-size: 200%;
-      }
-    </style>
+    .button1{
+      width: 80px;
+      height: 80px;
+      position: relative;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .btn-kanan{
+      left: 290px;
+      top: 500px;
+    }
+    .btn-kiri{
+      left: 0px;
+      top: 500px;
+    }
+  </style>
   </head>
-  <body>
-    <div class="bg-layar"></div>
-    
-    <div id = "world">
-     
-      <div class="back" id="back"></div>
-      <div class="tanah" id="tanah"></div>
-      <div class="char" id="kar"></div>
-                    </div>
-      <button class="button btn-kanan"
-              ontouchstart="mulai()"
-              ontouchend="stop()"
-              oncontextmenu="return false;">></button>
-      <button class="button btn-kiri"
-              ontouchstart="mulai1()"
-              ontouchend="stop1()"
-              oncontextmenu="return false;"><</button>
+  <body> <div class = "layar-awal" id ="main-menu">
 
+  <div class="bg-layar"></div>
+  
+
+  <div id="world">
+  <div class = "back" id="back"></div>
+
+  <div class="tanah" id="tanah"></div>
+  <div class ="char" id="kar"></div>
+  </div>
+  </div>
+  </div>
+    
+
+    <button class = "button1 btn-kanan"
+            ontouchstart="mulai()"
+            ontouchend="stop()"
+            oncontextmenu="return false;"
+            >></button>
+    <button class = "button1 btn-kiri"
+            ontouchstart="mulai1()"
+            ontouchend="stop1()"
+            oncontextmenu="return false;"
+            ><</button>
   </body>
   <script>
-    let lari = 0;
+  
+    let run = 0;
     let timer = null;
-    let bgpos = 0;
-    let lebarfoto = 1900;
-    let charelem = document.querySelector('.char');
-    let direction = 1;
-    let sfx = new Audio('langkah.mp3');
-    sfx.loop = true;
-    sfx.preload = 'auto';
+    let bgPos = 0;
+    let lebarFotoLatar = 700;
     
-    function walk(){
-      lari = lari + 30;
+    let charElem = document.querySelector('.char');
+    let direction = 1;
+    
+    let sfxLangkah = new Audio('langkah.mp3'); 
+    sfxLangkah.loop = true;
+    sfxLangkah.preload = 'auto';
+    
+
+
+
+
+
+
+
+
+  
+    function jalan(){
+      
+      
+      run = run + 10;
       direction = 1;
-      bgpos = -((lari % lebarfoto + lebarfoto) % lebarfoto);
+      bgPos = -((run % lebarFotoLatar + lebarFotoLatar) % lebarFotoLatar);
+      
+      
+      
+      
+      
       update();
     }
-    function backed(){
-     lari = lari - 30;
-     direction = -1;
-     bgpos = -((lari % lebarfoto + lebarfoto) % lebarfoto);
-     update();
+    function mundur(){
+      
+      run = run - 10;
+      direction = -1;
+      bgPos = -((run % lebarFotoLatar + lebarFotoLatar) % lebarFotoLatar);
+      
+
+      
+
+      
+      
+      update();
     }
-    function resetChar(){
-      document.querySelector('.char').style.backgroundImage= "url('karakter3.png')";
-    }
+    function resetChar() {
+  document.querySelector('.char').style.backgroundImage = "url('karakter3.png')";
+}
+
     function mulai(){
       if (timer !== null)return;
-      timer=setInterval(walk, 150);
-      sfx.currentTime=0;
-      sfx.play();
+      
+  
+      timer=setInterval(jalan,50);
+      sfxLangkah.currentTime = 0;
+  sfxLangkah.play();
+      
     }
     function mulai1(){
       if (timer !== null)return;
-      timer=setInterval(backed, 150);
-      sfx.currentTime=0;
-      sfx.play()
-    }
-    function stop(){
-      clearInterval(timer);
-      timer=null;
-      resetChar()
-      sfx.pause();
-    }
-    function stop1(){
-      clearInterval(timer);
-      timer=null;
-      resetChar()
-      sfx.pause();
-    }
-    function prepare(){
-      sfx.play().then(() => {
-        sfx.pause();
-        sfx.currentTime=0;}).catch(() => {});
-      }
-    function update(){
-      document.getElementById("back").style.backgroundPositionX= bgpos + "px";
-      document.getElementById("tanah").style.backgroundPositionX= bgpos + "px";
+
+      timer=setInterval(mundur,50);
+      sfxLangkah.currentTime = 0;
+  sfxLangkah.play();
       
-      let charStyle = document.querySelector('.char').style;
-      if (direction === -1){
-        charStyle.transform= "scaleX(-1)";
-      } else {
-        charStyle.transform= "scaleX(1)";
-      }
-      if (timer === null){
-        resetChar();
-        return;
-      }
-      let frame = Math.floor(Math.abs(lari) / 15) % 3;
-      if (frame === 0){
-        charStyle.backgroundImage= "url('karakter.png')";
-      } else if (frame === 1) {
-        charStyle.backgroundImage= "url('karakter2.png')";
-      } else if (frame === 2){
-        charStyle.backgroundImage= "url('karakter3.png')";
-      }
-      }
-      window.addEventListener('touchstart',
-        function(){
-          prepare();
-        }, { once : true });
-        
-    
+    }
+    function stop() {
+  clearInterval(timer);
+  timer = null;
+  resetChar()
+  
+  sfxLangkah.pause();
+  
+  
+}
+
+function stop1() {
+  clearInterval(timer);
+  timer = null;
+  resetChar()
+  
+  sfxLangkah.pause();
+  
+  
+}
+
+function prepareAudio() {
+  sfxLangkah.play().then(() => {
+    sfxLangkah.pause();
+    sfxLangkah.currentTime = 0;
+  }).catch(() => {});
+}
+
+    function update() {
+  document.getElementById("back").style.backgroundPositionX = bgPos + "px";
+  document.getElementById("tanah").style.backgroundPositionX = bgPos + "px";
+
+
+  let charStyle = document.querySelector('.char').style;
+  if (direction === -1) {
+    charStyle.transform = "scaleX(-1)";
+  } else {
+    charStyle.transform = "scaleX(1)";
+  }
+
+
+  if (timer === null) {
+    resetChar();
+    return;
+  }
+
+  let frame = Math.floor(Math.abs(run) / 25) % 3;
+
+  if (frame === 0) {
+    charStyle.backgroundImage = "url('karakter.png')";
+  } else if (frame === 1) {
+    charStyle.backgroundImage = "url('karakter2.png')";
+  } else if (frame === 2) {
+    charStyle.backgroundImage = "url('karakter3.png')";
+  }
+}
+
+
+
+
+window.addEventListener('touchstart', function() {
+  prepareAudio();
+}, { once: true });
+
   </script>
-</html>    
+  </html>
+
 
     
